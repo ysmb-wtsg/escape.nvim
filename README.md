@@ -10,15 +10,71 @@
 
 ## Installation
 
-Using `lazy` or `packer`:
+Using `lazy`:
 
 ```lua
 {
 	"ysmb-wtsg/in-and-out.nvim",
-	config = function()
-		vim.keymap.set("i", "<C-CR>", function()
-			require("in-and-out").in_and_out()
-		end
-	end,
+	keys = {
+		{ "<C-CR>", require("in-and-out").in_and_out, mode = "i" },
+	},
 }
+```
+
+## Configuration
+
+By default, this plugin will jump into and out of the following surrounding characters:
+
+```lua
+{ '"', "'", "(", ")", "{", "}", "[", "]", "`" }
+```
+
+If you are happy with this list of targets, you don't need to do any configuration.
+
+On the other hand, if you want to add to this list or replace it altogether, use the plugin's `setup` method. To add targets, pass `setup` an options table containing a sublist named `additional_targets`. To replace the original targets list entirely, pass `setup` an options table with a sublist called `targets`.
+
+Note: you cannot use both the `targets` and the `additional_targets` sublists at the same time. If you try, the plugin will apply `targets` and ignore `additional_targets`.
+
+See the examples below.
+
+Using `lazy`:
+
+```lua
+{
+	"ysmb-wtsg/in-and-out.nvim",
+	keys = {
+		{ "<C-CR>", require("in-and-out").in_and_out, mode = "i" },
+	},
+	opts = { additional_targets = { "“", "”" } },
+}
+```
+
+Manual `require`:
+
+```lua
+require("in-and-out.nvim").setup({
+	targets = { "(", ")", "[", "]" }
+})
+```
+
+## Mapping
+
+By default, the plugin does not set any mapping. You can set one through your plugin manager (if it supports setting mappings) or manually.
+
+Using `lazy`:
+
+```lua
+{
+	"ysmb-wtsg/in-and-out.nvim",
+	keys = {
+		{ "<C-CR>", require("in-and-out").in_and_out, mode = "i" },
+	},
+	opts = { additional_targets = { "“", "”" } },
+}
+```
+
+Manually:
+
+```lua
+vim.keymap.set("i", "<C-CR>", require("in-and-out").in_and_out)
 ```
